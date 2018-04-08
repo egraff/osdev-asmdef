@@ -1,0 +1,18 @@
+#include "mystruct.h"
+
+ASMDEF_COMMENT("Define some example values!");
+ASMDEF_OFFSETOF(struct mystruct, member_a, MEMBERA_OFF);
+ASMDEF_OFFSETOF(struct mystruct, member_b, MEMBERB_OFF);
+ASMDEF_OFFSETOF(struct mystruct, member_c, MEMBERC_OFF);
+ASMDEF_OFFSETOF(struct mystruct, member_d, MEMBERD_OFF);
+ASMDEF_SIZEOF(struct mystruct, MYSTRUCTSIZE);
+ASMDEF_SIZEOF(struct mystruct *, MYSTRUCTPTRSIZE);
+ASMDEF_CONST(0xbeefcace, MYCUSTOMASSEMBLYVAL);
+
+
+const int someVal = 123;
+
+
+ASMDEF_COMMENT("Some other defs");
+ASMDEF_VAL(someVal, SOME_VAL);
+ASMDEF_SIZEOF(someVal, SOME_VAL_SIZE);
