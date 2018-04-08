@@ -6,18 +6,20 @@ CFLAGS = -std=gnu89 -m64 -ffreestanding -Wno-unused-function
 ASMDEF_IDENT=_ASMDEF_
 ASMDEF_INCLUDE = include/asmdef_macros.h
 
-%.asmdef: %.asmexport $(ASMDEF_INCLUDE) Makefile
+%.asmdeftmp: %.asmexport $(ASMDEF_INCLUDE) Makefile
 	$(CC) $(CFLAGS) \
 	  -xc -masm=intel \
 	  -D"ASMDEF_IDENT=$(ASMDEF_IDENT)" \
 	  -S $< \
 	  -imacros $(ASMDEF_INCLUDE) \
-	  -o $(basename $@).asmdeftmp && \
-	$(AWK) '/$(ASMDEF_IDENT)/{sub(/$(ASMDEF_IDENT) /,""); print > "$@" }' $(basename $@).asmdeftmp && \
-	$(RM) $(basename $@).asmdeftmp
+	  -o $@
+
+%.asmdef: %.asmdeftmp Makefile
+	$(AWK) '/$(ASMDEF_IDENT)/{sub(/$(ASMDEF_IDENT) /,""); print > "$@" }' $<
 
 
 ASMDEFS = $(patsubst %.asmexport, %.asmdef, $(wildcard *.asmexport))
+.SECONDARY: $(ASMDEFS)
 
 %.o: %.s
 %.o: %.s $(ASMDEFS)
